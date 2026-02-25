@@ -1,0 +1,434 @@
+<html lang="zh-CN"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal Tech Product | 作品详情 | Ada Wang</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- GSAP 动画库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#111111',
+                        secondary: '#333333',
+                        accent: '#0066ff',
+                        light: '#f5f5f5',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-balance {
+                text-wrap: balance;
+            }
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            }
+            .transition-transform {
+                transition-property: transform;
+                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                transition-duration: 300ms;
+            }
+            .hover-scale {
+                @apply hover:scale-105 transition-transform duration-300;
+            }
+            .card-shadow {
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            }
+            .nav-shadow {
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            }
+        }
+    </style>
+    
+    <style>
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        /* 图片查看器样式 */
+        .image-viewer {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .image-viewer.active {
+            display: flex;
+        }
+        
+        .image-viewer img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+        
+        .image-viewer-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+        }
+        
+        /* 淡入动画 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        
+        .fade-in.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-white text-primary font-sans">
+    <!-- 导航栏 -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full bg-white bg-opacity-95 nav-shadow py-4 z-50">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="flex justify-between items-center">
+                <a href="../index.html" class="text-2xl font-bold text-primary">Shiqi Wang</a>
+                
+                <!-- 桌面导航 -->
+                <div class="hidden md:flex ml-auto space-x-8">
+                    <a href="../index.html" class="text-secondary hover:text-accent transition-colors">首页</a>
+                    <a href="../index.html#works" class="text-secondary hover:text-accent transition-colors">作品</a>
+                    <a href="../index.html#about" class="text-secondary hover:text-accent transition-colors">关于我</a>
+                    <a href="../index.html#contact" class="text-secondary hover:text-accent transition-colors">联系我</a>
+                </div>
+                
+                <!-- 移动端菜单按钮 -->
+                <button id="menu-toggle" class="md:hidden ml-auto text-primary focus:outline-none">
+                    <i class="fa fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 移动端导航菜单 -->
+        <div id="mobile-menu" class="md:hidden bg-white hidden absolute top-full left-0 w-full border-t border-gray-100">
+            <div class="container mx-auto px-4 py-4">
+                <a href="../index.html" class="block py-2 text-secondary hover:text-accent">Home</a>
+                <a href="../index.html#works" class="block py-2 text-secondary hover:text-accent">Works</a>
+                <a href="../index.html#about" class="block py-2 text-secondary hover:text-accent">About</a>
+                <a href="../index.html#contact" class="block py-2 text-secondary hover:text-accent">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="pt-16 pb-16">
+        <!-- 作品标题和简介 -->
+        <section class="pt-16 pb-12 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <div class="max-w-5xl mx-auto">
+                    <h1 class="text-3xl md:text-5xl font-bold mb-4">研究性学习成果获奖作品</h1>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="px-4 py-2 bg-gray-200 rounded-full text-sm">深度研究</span>
+                        <span class="px-4 py-2 bg-gray-200 rounded-full text-sm">宏观意识</span>
+                        <span class="px-4 py-2 bg-gray-200 rounded-full text-sm">2025</span>
+                    </div>
+                    <p class="text-gray-600 text-lg mb-8">本研究立足于数字技术革命性变革的时代背景，聚焦数字命运共同体的内涵阐释、现实挑战、构建路径与核心价值，试图从学理层面回应全球数字治理的现实难题。作为广告学专业的学生，参与这一研究不仅拓展了我对数字时代社会结构的理解，更训练了我从宏观视角把握社会议题、从复杂信息中提炼核心逻辑的能力。</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 主要图片展示 -->
+        <section class="py-12">
+            <div class="container mx-auto px-4">
+                <div class="max-w-5xl mx-auto">
+                    <div class="relative cursor-pointer hover:opacity-90 transition-opacity" onclick="openImageViewer('https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/37e136394a5e4d1ea2e405d57ec7592e~tplv-a9rns2rl98-image.image?rcl=20251011114612D6F40923774973B0CC79&amp;rk3s=8e244e95&amp;rrcfp=f06b921b&amp;x-expires=1762746398&amp;x-signature=4hK5eDz5NY%2B8ShCydYlAtCgpsd4%3D')">
+                        <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/c678b89d1d8a48a382138bf2cc184afd~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=20260225171612C29EEBEA97E7A778D868&amp;rrcfp=03245832&amp;x-expires=1772615776&amp;x-signature=b9yNnufSHpXypaDAS9ueNrfHFUE%3D" alt="Minimal Tech Product" class="w-full h-auto rounded-lg">
+                        <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-300">
+                            <span class="px-4 py-2 bg-white text-black text-sm font-medium rounded-md transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 opacity-0 hover:opacity-100">
+                                <i class="fa fa-search-plus mr-2"></i>查看大图
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 项目详情 -->
+        <section class="py-12">
+            <div class="container mx-auto px-4">
+                <div class="max-w-5xl mx-auto">
+                    <div class="grid grid-cols-1 gap-12">
+                        <!-- 左侧：项目概述 -->
+                        <div class="fade-in">
+                            <h2 class="text-2xl font-bold mb-6">项目总览</h2>
+                            <p class="text-gray-600 mb-6 leading-relaxed">本研究以“数字命运共同体构建的路径和价值”为核心议题，从学理内涵、现实挑战、解决路径、核心价值四个维度展开系统探究。在学理层面，界定数字命运共同体为“依托先进数字技术搭建全球数字交往网络，形成相互联系、命运与共的共同体体系”，并提炼其数字连通性、数字互惠性、数字调试性三大特征。在现实挑战层面，系统梳理了数字公共领域失序（数字监控、算法覆盖、平台权力渗透）、数字个人领域失真（虚拟实践认知偏差、屏幕控制）、国家安全威胁（技术层面与社会层面）、数字资本全球化扩张四大困境。在路径层面，提出培养数字人才、把握数字经济发展自主权、加强国际交流、推进全球化进程四维策略。在价值层面，揭示数字命运共同体对数字技术向善发展、全球数字治理难题化解、人类共同利益交融的深远意义。</p>
+                            <p class="text-gray-600 mb-6 leading-relaxed">本研究获湖南省第十届大学生思想政治理论课研究性学习成果展示竞赛校级三等奖，是一次从宏观视野到逻辑推演的完整学术训练。</p>
+                            
+                            
+                            
+                            <h3 class="text-xl font-semibold mb-4 mt-8" style="font-weight: normal; color: rgb(116, 151, 232);">查看链接：【金山文档 | WPS云文档】 数字命运共同体构建的路径和价值研究
+https://www.kdocs.cn/l/crwoEEfMhMQL</h3>
+                            <div class="flex flex-wrap gap-2">
+                               
+                        
+                        <!-- 右侧：设计过程 -->
+                        <div class="fade-in">
+                            <h2 class="text-2xl font-bold mb-6">创作核心过程</h2>
+                            
+                            <div class="space-y-8">
+                                <div>
+                                    <h3 class="text-xl font-semibold mb-2">选题确立与问题意识形成</h3>
+                                    <p class="text-gray-600">研究始于对习近平总书记“构建网络空间命运共同体”论述的关注。我们发现，数字技术革命性变革的时代背景下，数字命运共同体作为人类命运共同体理念在数字空间的具体延展，具有重要的理论价值和现实意义。</p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-semibold mb-2">文献梳理与研究框架搭建</h3>
+                                    <p class="text-gray-600">围绕选题，我们进行了系统的文献检索与梳理：
+
+国内研究方面，梳理了数字命运共同体内涵、困境、路径、价值四大方向的研究成果，涵盖李泉、黄浩然、徐昕、罗理章等学者的核心观点
+
+国外研究方面，研读了丹·席勒《数字资本主义》、克劳斯·施瓦布《第四次工业革命》等著作，把握国际学界对数字技术社会影响的宏观判断
+
+在评述基础上，发现现有研究存在内涵拓展不足、路径梳理不清、研究方法单一等问题，确立了本研究的切入方向</p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-semibold mb-2">逻辑构建与框架确立</h3>
+                                    <p class="text-gray-600">基于文献梳理，我们确立了“内涵阐释→现状剖析→解决路径→价值梳理”的四段式研究框架
+
+
+</p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-semibold mb-2">成果撰写与反复打磨</h3>
+                                    <p class="text-gray-600">撰写过程中经历了多轮修改，包括但不限于措辞，逻辑框架，论证的严密性，数据与个人思考的融合等等
+</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div></div></section>
+        
+        
+        <!-- 项目成果 -->
+        <section class="py-12 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <div class="max-w-5xl mx-auto">
+                    <h2 class="text-2xl font-bold mb-8">项目亮点</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- 成果1 -->
+                        <div class="bg-white p-6 rounded-lg shadow-sm fade-in">
+                            <div class="w-12 h-12 bg-accent bg-opacity-10 rounded-full flex items-center justify-center mb-4">
+                                <i class="fa fa-users text-accent text-xl"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-2">选题有鲜明的时代性与现实关切</h3>
+                            <p class="text-gray-600">紧扣习近平总书记重要论述和国家数字战略需求，聚焦“数字命运共同体”这一前沿议题，既回应了全球数字治理的时代课题，又贴合“数字中国”战略落地的现实需要，体现了敏锐的问题意识和宏观视野。</p>
+                        </div>
+                        
+                        <!-- 成果2 -->
+                        <div class="bg-white p-6 rounded-lg shadow-sm fade-in" style="transition-delay: 0.2s;">
+                            <div class="w-12 h-12 bg-accent bg-opacity-10 rounded-full flex items-center justify-center mb-4">
+                                <i class="fa fa-thumbs-up text-accent text-xl"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-2">研究框架逻辑严密，层层递进</h3>
+                            <p class="text-gray-600">“内涵阐释→现状剖析→解决路径→价值梳理”的四段式结构，形成“是什么→有什么问题→怎么解决→为什么重要”的完整逻辑闭环。</p>
+                        </div>
+                        
+                        <!-- 成果3 -->
+                        <div class="bg-white p-6 rounded-lg shadow-sm fade-in" style="transition-delay: 0.4s;">
+                            <div class="w-12 h-12 bg-accent bg-opacity-10 rounded-full flex items-center justify-center mb-4">
+                                <i class="fa fa-line-chart text-accent text-xl"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-2">跨学科视野拓展了广告学专业的思维边界</h3>
+                            <p class="text-gray-600">作为广告学专业学生参与思政类学术研究，本项目的独特价值在于：训练了从宏观社会议题中提炼洞察的能力，培养了系统性文献梳理和信息整合的习惯，强化了逻辑推演和论证严密的思维习惯——这些都是优秀广告策划人必备的底层能力。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+  
+                
+                <!-- 返回作品列表按钮 -->
+                <div class="text-center mt-12">
+                    <a href="../index.html#works" class="inline-flex items-center px-8 py-3 bg-black text-white font-medium rounded-md hover:bg-gray-800 transition duration-300">回到作品合集</a>
+                </div>
+            
+        
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="py-12 bg-black text-white mt-auto">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <h3 class="text-2xl font-bold">Shiqi Wang</h3>
+                    <p class="text-gray-400 mt-2">一枚值得信赖的intj</p>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <i class="fa fa-behance text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <i class="fa fa-dribbble text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <i class="fa fa-instagram text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <i class="fa fa-linkedin text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
+                <p>
+</p>
+            </div>
+        </div>
+    </footer>
+
+   
+
+    <script>
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 移动端菜单切换
+            const menuToggle = document.getElementById('menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            menuToggle.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // 导航栏滚动效果
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('bg-white', 'shadow-md');
+                    navbar.classList.remove('bg-opacity-95');
+                } else {
+                    navbar.classList.remove('shadow-md');
+                    navbar.classList.add('bg-opacity-95');
+                }
+            });
+            
+            // 淡入动画
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const fadeInOnScroll = function() {
+                fadeElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (elementTop < windowHeight - 100) {
+                        element.classList.add('active');
+                    }
+                });
+            };
+            
+            // 初始检查
+            fadeInOnScroll();
+            
+            // 滚动时检查
+            window.addEventListener('scroll', fadeInOnScroll);
+            
+            // 使用 GSAP 添加更复杂的动画
+            if (typeof gsap !== 'undefined') {
+                // 标题和简介动画
+                gsap.from('section:first-of-type h1', {
+                    opacity: 0,
+                    y: 50,
+                    duration: 1,
+                    delay: 0.2
+                });
+                
+                gsap.from('section:first-of-type .flex', {
+                    opacity: 0,
+                    y: 30,
+                    duration: 1,
+                    delay: 0.5
+                });
+                
+                gsap.from('section:first-of-type p', {
+                    opacity: 0,
+                    y: 20,
+                    duration: 1,
+                    delay: 0.8
+                });
+                
+                // 主要图片动画
+                gsap.from('section:nth-of-type(2) img', {
+                    opacity: 0,
+                    scale: 0.9,
+                    duration: 1,
+                    delay: 1
+                });
+            }
+        });
+        
+        // 图片查看器功能
+        function openImageViewer(imageUrl) {
+            const viewer = document.getElementById('image-viewer');
+            const viewerImage = document.getElementById('viewer-image');
+            
+            viewerImage.src = imageUrl;
+            viewer.classList.add('active');
+            document.body.style.overflow = 'hidden'; // 防止背景滚动
+        }
+        
+        function closeImageViewer() {
+            const viewer = document.getElementById('image-viewer');
+            viewer.classList.remove('active');
+            document.body.style.overflow = 'auto'; // 恢复背景滚动
+        }
+        
+        // 点击图片查看器背景关闭
+        document.getElementById('image-viewer').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeImageViewer();
+            }
+        });
+        
+        // 按ESC键关闭图片查看器
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeImageViewer();
+            }
+        });
+    </script>
+
+
+</body></html>
