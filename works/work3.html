@@ -1,0 +1,400 @@
+<html lang="zh-CN"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gold &amp; Black Branding | 作品详情 | Ada Wang</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- GSAP 动画库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#111111',
+                        secondary: '#333333',
+                        accent: '#0066ff',
+                        light: '#f5f5f5',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-balance {
+                text-wrap: balance;
+            }
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            }
+            .transition-transform {
+                transition-property: transform;
+                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                transition-duration: 300ms;
+            }
+            .hover-scale {
+                @apply hover:scale-105 transition-transform duration-300;
+            }
+            .card-shadow {
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            }
+            .nav-shadow {
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            }
+        }
+    </style>
+    
+    <style>
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        /* 图片查看器样式 */
+        .image-viewer {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .image-viewer.active {
+            display: flex;
+        }
+        
+        .image-viewer img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+        
+        .image-viewer-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+        }
+        
+        /* 淡入动画 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        
+        .fade-in.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-white text-primary font-sans">
+    <!-- 导航栏 -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full bg-white bg-opacity-95 nav-shadow py-4 z-50">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="flex justify-between items-center">
+                <a href="../index.html" class="text-2xl font-bold text-primary">Shiqi Wang</a>
+                
+                <!-- 桌面导航 -->
+                <div class="hidden md:flex ml-auto space-x-8">
+                    <a href="../index.html" class="text-secondary hover:text-accent transition-colors">首页</a>
+                    <a href="../index.html#works" class="text-secondary hover:text-accent transition-colors">作品</a>
+                    <a href="../index.html#about" class="text-secondary hover:text-accent transition-colors">关于我</a>
+                    <a href="../index.html#contact" class="text-secondary hover:text-accent transition-colors">联系我</a>
+                </div>
+                
+                <!-- 移动端菜单按钮 -->
+                <button id="menu-toggle" class="md:hidden ml-auto text-primary focus:outline-none">
+                    <i class="fa fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 移动端导航菜单 -->
+        <div id="mobile-menu" class="md:hidden bg-white hidden absolute top-full left-0 w-full border-t border-gray-100">
+            <div class="container mx-auto px-4 py-4">
+                <a href="../index.html" class="block py-2 text-secondary hover:text-accent">Home</a>
+                <a href="../index.html#works" class="block py-2 text-secondary hover:text-accent">Works</a>
+                <a href="../index.html#about" class="block py-2 text-secondary hover:text-accent">About</a>
+                <a href="../index.html#contact" class="block py-2 text-secondary hover:text-accent">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="pt-16 pb-16">
+        <!-- 作品标题和简介 -->
+        <section class="pt-16 pb-12 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <div class="max-w-5xl mx-auto">
+                    <h1 class="text-3xl md:text-5xl font-bold mb-4">平台创作者计划精选内容</h1>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="px-4 py-2 bg-gray-200 rounded-full text-sm">内容创作</span>
+                        <span class="px-4 py-2 bg-gray-200 rounded-full text-sm">实践活动</span>
+                        <span class="px-4 py-2 bg-gray-200 rounded-full text-sm">社区共建</span>
+                    </div>
+                    <p class="text-gray-600 text-lg mb-8">
+                        通过加入小红书、网易lofter、网易小蜜蜂的创作计划及实践活动，进一步探索内容创作和账号运营并参与了生态共建，其中活动均取得了一点小成果，也更好的培养了运营思维和传播技巧。
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 主要图片展示 -->
+        <section class="py-12">
+            <div class="container mx-auto px-4">
+                <div class="max-w-5xl mx-auto">
+                    <div class="relative cursor-pointer hover:opacity-90 transition-opacity" onclick="openImageViewer('https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/574e47a1407b482b836e9e65afe0a269~tplv-a9rns2rl98-image.image?rcl=20251013163305F8CF0626CD00FB1D6A39&amp;rk3s=8e244e95&amp;rrcfp=2609e108&amp;x-expires=1760949190&amp;x-signature=JUmkfR89C%2FLnKtiIouqP61rG%2FeE%3D')">
+                        <img src="https://p6-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/5ceca85ecfe54f19ba889dba20a8440d~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=2026022515423425BDB53BAB7E7B98CC78&amp;rrcfp=e75484ac&amp;x-expires=1772610154&amp;x-signature=xwo%2FkFHy68YxKd3MTbbcJZ548fA%3D" alt="Gold &amp; Black Branding" class="w-full h-auto rounded-lg">
+                        <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-300">
+                            <span class="px-4 py-2 bg-white text-black text-sm font-medium rounded-md transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 opacity-0 hover:opacity-100">
+                                <i class="fa fa-search-plus mr-2"></i>查看大图
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 项目详情 -->
+        <section class="py-12">
+            <div class="container mx-auto px-4">
+                <div class="max-w-5xl mx-auto">
+                    <div class="grid grid-cols-1 gap-12">
+                        <!-- 左侧：项目概述 -->
+                        <div class="fade-in">
+                            <h2 class="text-2xl font-bold mb-6">活动总览</h2>
+                            <p class="text-gray-600 mb-6 leading-relaxed">
+                                这几个活动的周期大致为1-2个月，在这期间，各账号分别都收获了三位数的粉丝和四位数的点赞，尽管不是非常夸张夺人眼球的数据，但是表现稳定，投入也得到了一定的回报，更重要的是从现实的落地实践上，促进了对内容发布的思考，对平台生态的研究，对网感和用户喜好的了解。这段经历让我明白一件事：好的内容不是灵感迸发，而是一次次试错后的校准。创作者计划不只是让我学会了怎么写，更让我学会了怎么看数据、怎么听用户、怎么迭代自己。
+                            </p>
+                            <p class="text-gray-600 mb-6 leading-relaxed">我的角色： 独立运营账号，负责选题策划、文案撰写、数据分析、用户互动全流程</p>
+                            
+                        
+                            
+                          
+        
+         
+        <!-- 项目成果 -->
+        <section class="py-12 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <div class="max-w-5xl mx-auto">
+                    <h2 class="text-2xl font-bold mb-8">亮点成果</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- 成果1 -->
+                        <div class="bg-white p-6 rounded-lg shadow-sm fade-in">
+                            <div class="w-12 h-12 bg-accent bg-opacity-10 rounded-full flex items-center justify-center mb-4">
+                                <i class="fa fa-users text-accent text-xl"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-2">网易LOFTER</h3>
+                            <p class="text-gray-600">
+                                基于本人现实生活的经验和感兴趣的游戏，敏锐的发现了游戏设定中没有交代清楚容易产生误会的细节，相关讨论发布之后果然引起众多共鸣，因此单篇文章取得了19w＋的阅读量。
+                            </p>
+                        </div>
+                        
+                        <!-- 成果2 -->
+                        <div class="bg-white p-6 rounded-lg shadow-sm fade-in" style="transition-delay: 0.2s;">
+                            <div class="w-12 h-12 bg-accent bg-opacity-10 rounded-full flex items-center justify-center mb-4">
+                                <i class="fa fa-thumbs-up text-accent text-xl"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-2">小红书</h3>
+                            <p class="text-gray-600">
+                                这个账号的主要内容是围绕我的爱好绘画所展开的，当我发现一开始试水的几个视频反响平平时，便去研究这个活动里其他创作者是怎么做的，如果没有顶牛的画技或者自带流量的热度，就需要顺势借助高热度的事物，因此在哪吒ip爆火之际，我便选择了它作为我的创作内容，数据表现为历史最佳，相关作品累计取得1000＋点赞，而在活动期间所有作品累计获得了近30w的浏览量。
+                            </p>
+                        </div>
+                        
+                        <!-- 成果3 -->
+                        <div class="bg-white p-6 rounded-lg shadow-sm fade-in" style="transition-delay: 0.4s;">
+                            <div class="w-12 h-12 bg-accent bg-opacity-10 rounded-full flex items-center justify-center mb-4">
+                                <i class="fa fa-line-chart text-accent text-xl"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-2">网易小蜜蜂</h3>
+                            <p class="text-gray-600">
+                                我有幸加入了这个由网易和创意星球合作展开的声浪冬令营实践计划，亲身参与到这个新兴平台的生态共建，充分了解了内容创作者和平台之间的相互支持关系，得到了很多的心得体会和现实经验。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+   
+                
+                <!-- 返回作品列表按钮 -->
+                <div class="text-center mt-12">
+                    <a href="../index.html#works" class="inline-flex items-center px-8 py-3 bg-black text-white font-medium rounded-md hover:bg-gray-800 transition duration-300">回到作品合集</a>
+                </div>
+            
+        
+    </div></div></div></div></section></main>
+
+    <!-- 页脚 -->
+    <footer class="py-12 bg-black text-white mt-auto">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <h3 class="text-2xl font-bold">Shiqi Wang</h3>
+                    <p class="text-gray-400 mt-2">一枚值得信赖的intj</p>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <i class="fa fa-behance text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <i class="fa fa-dribbble text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <i class="fa fa-instagram text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <i class="fa fa-linkedin text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
+                <p>
+</p>
+            </div>
+        </div>
+    </footer>
+
+  
+
+    <script>
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 移动端菜单切换
+            const menuToggle = document.getElementById('menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            menuToggle.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // 导航栏滚动效果
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('bg-white', 'shadow-md');
+                    navbar.classList.remove('bg-opacity-95');
+                } else {
+                    navbar.classList.remove('shadow-md');
+                    navbar.classList.add('bg-opacity-95');
+                }
+            });
+            
+            // 淡入动画
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const fadeInOnScroll = function() {
+                fadeElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (elementTop < windowHeight - 100) {
+                        element.classList.add('active');
+                    }
+                });
+            };
+            
+            // 初始检查
+            fadeInOnScroll();
+            
+            // 滚动时检查
+            window.addEventListener('scroll', fadeInOnScroll);
+            
+            // 使用 GSAP 添加更复杂的动画
+            if (typeof gsap !== 'undefined') {
+                // 标题和简介动画
+                gsap.from('section:first-of-type h1', {
+                    opacity: 0,
+                    y: 50,
+                    duration: 1,
+                    delay: 0.2
+                });
+                
+                gsap.from('section:first-of-type .flex', {
+                    opacity: 0,
+                    y: 30,
+                    duration: 1,
+                    delay: 0.5
+                });
+                
+                gsap.from('section:first-of-type p', {
+                    opacity: 0,
+                    y: 20,
+                    duration: 1,
+                    delay: 0.8
+                });
+                
+                // 主要图片动画
+                gsap.from('section:nth-of-type(2) img', {
+                    opacity: 0,
+                    scale: 0.9,
+                    duration: 1,
+                    delay: 1
+                });
+            }
+        });
+        
+        // 图片查看器功能
+        function openImageViewer(imageUrl) {
+            const viewer = document.getElementById('image-viewer');
+            const viewerImage = document.getElementById('viewer-image');
+            
+            viewerImage.src = imageUrl;
+            viewer.classList.add('active');
+            document.body.style.overflow = 'hidden'; // 防止背景滚动
+        }
+        
+        function closeImageViewer() {
+            const viewer = document.getElementById('image-viewer');
+            viewer.classList.remove('active');
+            document.body.style.overflow = 'auto'; // 恢复背景滚动
+        }
+        
+        // 点击图片查看器背景关闭
+        document.getElementById('image-viewer').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeImageViewer();
+            }
+        });
+        
+        // 按ESC键关闭图片查看器
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeImageViewer();
+            }
+        });
+    </script>
+
+
+</body></html>

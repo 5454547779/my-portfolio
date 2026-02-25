@@ -1,0 +1,455 @@
+<html lang="zh-CN"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UX Research Report | 作品详情 | Ada Wang</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- GSAP 动画库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#111111',
+                        secondary: '#333333',
+                        accent: '#0066ff',
+                        light: '#f5f5f5',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-balance {
+                text-wrap: balance;
+            }
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            }
+            .transition-transform {
+                transition-property: transform;
+                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                transition-duration: 300ms;
+            }
+            .hover-scale {
+                @apply hover:scale-105 transition-transform duration-300;
+            }
+            .card-shadow {
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            }
+            .nav-shadow {
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            }
+        }
+    </style>
+    
+    <style>
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        /* 图片查看器样式 */
+        .image-viewer {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .image-viewer.active {
+            display: flex;
+        }
+        
+        .image-viewer img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+        
+        .image-viewer-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+        }
+        
+        /* 淡入动画 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        
+        .fade-in.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-white text-primary font-sans">
+    <!-- 导航栏 -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full bg-white bg-opacity-95 nav-shadow py-4 z-50">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="flex justify-between items-center">
+                <a href="../index.html" class="text-2xl font-bold text-primary">Shiqi Wang</a>
+                
+                <!-- 桌面导航 -->
+                <div class="hidden md:flex ml-auto space-x-8">
+                    <a href="../index.html" class="text-secondary hover:text-accent transition-colors">首页</a>
+                    <a href="../index.html#works" class="text-secondary hover:text-accent transition-colors">作品</a>
+                    <a href="../index.html#about" class="text-secondary hover:text-accent transition-colors">关于我</a>
+                    <a href="../index.html#contact" class="text-secondary hover:text-accent transition-colors">联系我</a>
+                </div>
+                
+                <!-- 移动端菜单按钮 -->
+                <button id="menu-toggle" class="md:hidden ml-auto text-primary focus:outline-none">
+                    <i class="fa fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 移动端导航菜单 -->
+        <div id="mobile-menu" class="md:hidden bg-white hidden absolute top-full left-0 w-full border-t border-gray-100">
+            <div class="container mx-auto px-4 py-4">
+                <a href="../index.html" class="block py-2 text-secondary hover:text-accent">Home</a>
+                <a href="../index.html#works" class="block py-2 text-secondary hover:text-accent">Works</a>
+                <a href="../index.html#about" class="block py-2 text-secondary hover:text-accent">About</a>
+                <a href="../index.html#contact" class="block py-2 text-secondary hover:text-accent">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="pt-16 pb-16">
+        <!-- 作品标题和简介 -->
+        <section class="pt-16 pb-12 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <div class="max-w-5xl mx-auto">
+                    <h1 class="text-3xl md:text-5xl font-bold mb-4">三创赛获奖作品</h1>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="px-4 py-2 bg-gray-200 rounded-full text-sm">创新创意创业</span>
+                        <span class="px-4 py-2 bg-gray-200 rounded-full text-sm">市场</span>
+                        <span class="px-4 py-2 bg-gray-200 rounded-full text-sm">2025</span>
+                    </div>
+                    <p class="text-gray-600 text-lg mb-8">这是一个专注于青年创作者技能共享与合作的创新平台，致力于解决校园及青年创作者群体中的供需错配问题。通过双向需求匹配算法和游戏化任务机制，让每一次合作都真正实现“一拍即合”。
+
+本项目获大学生三创赛学校二等奖，是我在商业策划、产品设计、用户洞察领域的一次综合实践。
+
+
+</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 主要图片展示 -->
+        <section class="py-12">
+            <div class="container mx-auto px-4">
+                <div class="max-w-5xl mx-auto">
+                    <div class="relative cursor-pointer hover:opacity-90 transition-opacity" onclick="openImageViewer('https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/98c01d1c61c645778cdcb4e529a8882e~tplv-a9rns2rl98-image.image?rcl=20251013164023970D359F3CD4DADE7A59&amp;rk3s=8e244e95&amp;rrcfp=2609e108&amp;x-expires=1760949627&amp;x-signature=zU77Hv%2BXz8IMMwolvvRh7iQmasM%3D')">
+                        <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/dc1d68c34f0a45abbad52465828d69cb~tplv-a9rns2rl98-image.image?lk3s=8e244e95&amp;rcl=20260225165954A9454246C8EDCD9D438D&amp;rrcfp=e75484ac&amp;x-expires=1772614794&amp;x-signature=rSu%2BdpFTSUfZkTi9cCpe3Kyu4B8%3D" alt="UX Research Report" class="w-full h-auto rounded-lg">
+                        <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-300">
+                            <span class="px-4 py-2 bg-white text-black text-sm font-medium rounded-md transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 opacity-0 hover:opacity-100">
+                                <i class="fa fa-search-plus mr-2"></i>查看大图
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 项目详情 -->
+        <section class="py-12">
+            <div class="container mx-auto px-4">
+                <div class="max-w-5xl mx-auto">
+                    <div class="grid grid-cols-1 gap-12">
+                        <!-- 左侧：项目概述 -->
+                        <div class="fade-in">
+                            <h2 class="text-2xl font-bold mb-6">项目总览</h2>
+                            <p class="text-gray-600 mb-6 leading-relaxed">“一拍即合”是一个专注于青年创作者技能共享与合作的创新平台，致力于解决校园及青年群体中普遍存在的“技能闲置”与“资源匮乏”之间的矛盾。项目精准锁定18-25岁青年创作者（摄影师、设计师、化妆师、文案等）及有技能需求的个人与社团作为核心用户，通过双向需求匹配算法和游戏化任务机制，让创作者能够快速找到合适的合作伙伴，降低创作门槛。平台围绕“需求匹配广场”“挑战任务大厅”“个人工作室”三大功能板块，构建从“找人”到“创作”再到“成长”的全流程闭环，并设计了服务费抽成、会员订阅、精准广告、数据资产变现等多元化盈利模式，预测首年营收可达428万元。本项目获大学生三创赛学校二等奖，我在其中担任核心成员，参与整体策划，并主要负责未来规划与风险应对和营销推广板块，是一次从用户洞察到商业落地的完整实践。</p>
+                           
+                            
+                            
+                            
+                            <h3 class="text-xl font-semibold mb-4 mt-8" style="font-weight: normal; color: rgb(75, 125, 219);">查看链接：【金山文档 | WPS云文档】 一拍即合
+https://www.kdocs.cn/l/crVbuVHUP3Q5</h3>
+                            <div class="flex flex-wrap gap-2">
+                              
+                        
+                        <!-- 右侧：设计过程 -->
+                        <div class="fade-in">
+                            <h2 class="text-2xl font-bold mb-6">创作核心过程</h2>
+                            
+                            <div class="space-y-8">
+                                <div>
+                                    <h3 class="text-xl font-semibold mb-2" style="color: rgb(160, 149, 237);">痛点发现与选题确立</h3>
+                                    <p class="text-gray-600">在校园观察中，我发现身边很多创作者面临共同困境：摄影系的同学想拍人像找不到模特，编导系的同学想做短片凑不齐团队，设计系的同学接了活却没文案搭档——技能闲置与资源匮乏的矛盾普遍存在，却没有一个平台专门解决这个问题。基于这一洞察，确定了“青年创作者技能共享平台”的项目方向。</p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-semibold mb-2" style="color: rgb(180, 150, 235);">竞品研究与差异化定位</h3>
+                                    <p class="text-gray-600">调研了市面上相关平台：
+
+猪八戒网：偏企业服务外包，交易属性强，对学生群体不友好
+
+豆瓣同城：偏文艺活动社交，缺乏精准匹配和创作闭环
+
+Fiverr：国外平台，技能交易为主，但缺乏社交激励和本土化适配
+
+我们发现，“精准匹配+游戏化激励+校园场景定制”是市场空白点，由此确立了“一拍即合”的核心差异化定位。</p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-semibold mb-2" style="color: rgb(175, 145, 235);">产品功能设计</h3>
+                                    <p class="text-gray-600">围绕用户需求，我们设计了三大核心板块：
+
+需求匹配广场：LBS热力地图+智能推荐+灵感盲盒，解决“找人难”
+
+挑战任务大厅：限时主题挑战+智能组队+创作作战室，解决“没动力”
+
+个人工作室：动态身份墙+数据驾驶舱+技能进化树，解决“成长慢”
+
+每一块功能都基于真实用户场景设计，并有明确的数据指标支撑。</p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-semibold mb-2" style="color: rgb(164, 159, 237);">商业逻辑闭环</h3>
+                                    <p class="text-gray-600">在保证产品体验的同时，设计了完整的商业模式——
+
+用户端：免费基础功能+会员增值服务
+
+交易端：服务费抽成+场景推荐分佣
+
+数据端：匿名化技能标签变现+行业报告
+
+生态端：线下活动+品牌合作+创作者孵化
+
+财务预测按季度拆解，收入来源清晰，成本结构合理，形成可落地的商业闭环。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div></div></section>
+        
+        
+        <!-- 项目成果 -->
+        <section class="py-12 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <div class="max-w-5xl mx-auto">
+                    <h2 class="text-2xl font-bold mb-8">项目亮点</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- 成果1 -->
+                        <div class="bg-white p-6 rounded-lg shadow-sm fade-in">
+                            <div class="w-12 h-12 bg-accent bg-opacity-10 rounded-full flex items-center justify-center mb-4">
+                                <i class="fa fa-users text-accent text-xl"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-2">精准切入校园创作群体真实痛点</h3>
+                            <p class="text-gray-600">“技能闲置”与“资源匮乏”的矛盾在高校创作者中普遍存在，但市场上没有专门解决这一问题的平台。项目选题切口小、痛点真、需求刚，具备扎实的用户基础。</p>
+                        </div>
+                        
+                        <!-- 成果2 -->
+                        <div class="bg-white p-6 rounded-lg shadow-sm fade-in" style="transition-delay: 0.2s;">
+                            <div class="w-12 h-12 bg-accent bg-opacity-10 rounded-full flex items-center justify-center mb-4">
+                                <i class="fa fa-thumbs-up text-accent text-xl"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-2">风险意识前置</h3>
+                            <p class="text-gray-600">不仅规划了发展路径，还系统分析了匹配效率、社群冷启动、合规性、盈利模式、团队稳定性五大风险，并给出具体应对策略，体现全局思维和风险意识。</p>
+                        </div>
+                        
+                        <!-- 成果3 -->
+                        <div class="bg-white p-6 rounded-lg shadow-sm fade-in" style="transition-delay: 0.4s;">
+                            <div class="w-12 h-12 bg-accent bg-opacity-10 rounded-full flex items-center justify-center mb-4">
+                                <i class="fa fa-line-chart text-accent text-xl"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-2">功能设计完整且落地性强</h3>
+                            <p class="text-gray-600">三大板块（需求匹配、挑战任务、个人工作室）覆盖了从“找人”到“创作”到“成长”的全流程，每一个功能都有明确的用户场景和交互细节描述，不是空想的概念，而是可落地的产品设计。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+   
+                
+                <!-- 返回作品列表按钮 -->
+                <div class="text-center mt-12">
+                    <a href="../index.html#works" class="inline-flex items-center px-8 py-3 bg-black text-white font-medium rounded-md hover:bg-gray-800 transition duration-300">回到作品合集</a>
+                </div>
+            
+        
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="py-12 bg-black text-white mt-auto">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <h3 class="text-2xl font-bold">Shiqi Wang</h3>
+                    <p class="text-gray-400 mt-2">一枚值得信赖的intj</p>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <i class="fa fa-behance text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <i class="fa fa-dribbble text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <i class="fa fa-instagram text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                        <i class="fa fa-linkedin text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
+                <p>
+</p>
+            </div>
+        </div>
+    </footer>
+
+  
+
+    <script>
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 移动端菜单切换
+            const menuToggle = document.getElementById('menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            menuToggle.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // 导航栏滚动效果
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('bg-white', 'shadow-md');
+                    navbar.classList.remove('bg-opacity-95');
+                } else {
+                    navbar.classList.remove('shadow-md');
+                    navbar.classList.add('bg-opacity-95');
+                }
+            });
+            
+            // 淡入动画
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const fadeInOnScroll = function() {
+                fadeElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (elementTop < windowHeight - 100) {
+                        element.classList.add('active');
+                    }
+                });
+            };
+            
+            // 初始检查
+            fadeInOnScroll();
+            
+            // 滚动时检查
+            window.addEventListener('scroll', fadeInOnScroll);
+            
+            // 使用 GSAP 添加更复杂的动画
+            if (typeof gsap !== 'undefined') {
+                // 标题和简介动画
+                gsap.from('section:first-of-type h1', {
+                    opacity: 0,
+                    y: 50,
+                    duration: 1,
+                    delay: 0.2
+                });
+                
+                gsap.from('section:first-of-type .flex', {
+                    opacity: 0,
+                    y: 30,
+                    duration: 1,
+                    delay: 0.5
+                });
+                
+                gsap.from('section:first-of-type p', {
+                    opacity: 0,
+                    y: 20,
+                    duration: 1,
+                    delay: 0.8
+                });
+                
+                // 主要图片动画
+                gsap.from('section:nth-of-type(2) img', {
+                    opacity: 0,
+                    scale: 0.9,
+                    duration: 1,
+                    delay: 1
+                });
+            }
+        });
+        
+        // 图片查看器功能
+        function openImageViewer(imageUrl) {
+            const viewer = document.getElementById('image-viewer');
+            const viewerImage = document.getElementById('viewer-image');
+            
+            viewerImage.src = imageUrl;
+            viewer.classList.add('active');
+            document.body.style.overflow = 'hidden'; // 防止背景滚动
+        }
+        
+        function closeImageViewer() {
+            const viewer = document.getElementById('image-viewer');
+            viewer.classList.remove('active');
+            document.body.style.overflow = 'auto'; // 恢复背景滚动
+        }
+        
+        // 点击图片查看器背景关闭
+        document.getElementById('image-viewer').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeImageViewer();
+            }
+        });
+        
+        // 按ESC键关闭图片查看器
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeImageViewer();
+            }
+        });
+    </script>
+
+
+</body></html>
